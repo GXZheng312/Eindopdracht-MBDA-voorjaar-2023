@@ -12,9 +12,11 @@ import java.util.ArrayList;
 public class DishAdapter extends RecyclerView.Adapter<DishViewHolder> {
 
     private ArrayList<Dish> dishes;
+    private OnItemClickListener listener;
 
-    public DishAdapter(ArrayList<Dish> dishes) {
+    public DishAdapter(ArrayList<Dish> dishes, OnItemClickListener listener) {
         this.dishes = dishes;
+        this.listener = listener;
     }
 
     @NonNull
@@ -29,6 +31,12 @@ public class DishAdapter extends RecyclerView.Adapter<DishViewHolder> {
         Dish dish = dishes.get(position);
 //        holder.imageView.setImageResource(dish.id)
         holder.titleTextView.setText(dish.title);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.onItemClick(dish);
+            }
+        });
     }
 
     @Override
