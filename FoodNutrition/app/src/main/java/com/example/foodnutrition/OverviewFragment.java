@@ -119,8 +119,8 @@ public class OverviewFragment extends Fragment {
                 if (recipes instanceof JSONArray) {
                     JSONArray recipesArray = (JSONArray) recipes;
                     for (int i = 0; i < recipesArray.length(); i++) {
-                        JSONObject recipe = recipesArray.getJSONObject(i);
-                        dishAdapter.addDish(new Dish(recipe.getString("title"), recipe.getString("instructions")));
+                        JSONObject recipeJson = recipesArray.getJSONObject(i);
+                        dishAdapter.addDish(new Dish(recipeJson));
                     }
                 }
 
