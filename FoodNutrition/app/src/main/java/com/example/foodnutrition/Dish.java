@@ -1,9 +1,14 @@
 package com.example.foodnutrition;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import androidx.annotation.NonNull;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class Dish {
+public class Dish implements Parcelable {
     protected String title;
     protected String instructions;
 
@@ -27,4 +32,14 @@ public class Dish {
         return instructions;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(@NonNull Parcel parcel, int i) {
+        parcel.writeString(instructions);
+        parcel.writeString(title);
+    }
 }

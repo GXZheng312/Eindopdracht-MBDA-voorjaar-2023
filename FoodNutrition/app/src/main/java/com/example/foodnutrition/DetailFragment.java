@@ -1,6 +1,7 @@
 package com.example.foodnutrition;
 
 import android.os.Bundle;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,9 +26,9 @@ public class DetailFragment extends Fragment {
 
         Bundle argument = getArguments();
         if(argument != null) {
-            String dishTitle = argument.getString("title");
-//            Dish dish = argument.getParcelable(DISH_PARCEL, Dish.class); //TODO
-            Dish dish = new Dish(dishTitle, "todo: show info of dish here!"); // TODO get data from API with this dish title
+//            String dishTitle = argument.getString("title");
+            Dish dish = argument.getParcelable(DISH_PARCEL, Dish.class);
+//            Dish dish = new Dish(dishTitle, "todo: show info of dish here!"); // TODO get data from API with this dish title
             setDish(dish);
         }
 
@@ -44,7 +45,7 @@ public class DetailFragment extends Fragment {
             return;
         }
         titleTextView.setText(dish.getTitle());
-        instructionTextView.setText(dish.getInstructions());
+        instructionTextView.setText(Html.fromHtml(dish.getInstructions(), Html.FROM_HTML_MODE_COMPACT));
 
     }
 }
