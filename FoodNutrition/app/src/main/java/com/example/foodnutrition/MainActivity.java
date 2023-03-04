@@ -38,7 +38,6 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
                 .replace(R.id.fragment_container, new OverviewFragment())
                 .commit();
 
-        new ApiRequest().execute("https://api.spoonacular.com/recipes/random");
 
 
     }
@@ -59,65 +58,4 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
                 .commit();
     }
 
-    private class ApiRequest extends AsyncTask<String, Integer, JSONObject>  {
-
-        private ArrayList<JSONObject> dataResponses;
-
-        public ApiRequest(){
-            dataResponses = new ArrayList<>();
-        }
-
-        @Override
-        protected JSONObject doInBackground(String... urls) {
-            for (String url : urls) {
-                try {
-                    HttpURLConnection connection = this.AttemptConnection(url);
-
-                    dataResponses.add(this.GetJSONData(connection));
-
-                    connection.disconnect();
-
-                } catch (Exception e) {
-
-                }
-            }
-
-            return dataResponses.get(0);
-        }
-
-        protected void onPostExecute(JSONObject result){
-            TextView textView = findViewById(R.id.textView2);
-
-            textView.setText(result.toString());
-        }
-
-        private HttpURLConnection AttemptConnection(String urlString) throws IOException {
-            URL url = new URL(urlString + "?number=10");
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setConnectTimeout(10000);
-            connection.setRequestMethod("GET");
-            connection.setRequestProperty("x-api-key", "ffb4b0dbeae8467e88fb6cb9cab493da");
-
-            if (connection.getResponseCode() == HttpURLConnection.HTTP_OK)
-            {
-                return connection;
-            }
-            return null;
-        }
-
-        private JSONObject GetJSONData(HttpURLConnection connection) throws IOException, JSONException {
-            BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-            StringBuilder sb = new StringBuilder();
-            String line;
-
-            while ((line = br.readLine()) != null) {
-                sb.append(line+"\n");
-            }
-
-            br.close();
-
-            return new JSONObject(sb.toString());
-        }
-
-    }
 }

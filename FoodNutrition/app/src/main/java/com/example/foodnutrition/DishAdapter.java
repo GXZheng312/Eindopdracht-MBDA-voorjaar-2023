@@ -19,6 +19,17 @@ public class DishAdapter extends RecyclerView.Adapter<DishViewHolder> {
         this.listener = listener;
     }
 
+    public DishAdapter(OnItemClickListener listener) {
+        this.dishes = new ArrayList<Dish>();
+        this.listener = listener;
+    }
+
+
+
+    public void setDishes(ArrayList<Dish> dishes) {
+        this.dishes = dishes;
+    }
+
     @NonNull
     @Override
     public DishViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -44,4 +55,8 @@ public class DishAdapter extends RecyclerView.Adapter<DishViewHolder> {
         return dishes.size();
     }
 
+    public void addDish(Dish dish) {
+        dishes.add(dish);
+        notifyDataSetChanged();
+    }
 }
