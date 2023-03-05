@@ -1,13 +1,16 @@
 package com.example.foodnutrition;
 
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +33,7 @@ import java.util.ArrayList;
  */
 public class OverviewFragment extends Fragment {
 
+    private static final int MAX_NUMBER_DISH = 10;
     private DishAdapter dishAdapter;
 
     public OverviewFragment() {
@@ -71,7 +75,8 @@ public class OverviewFragment extends Fragment {
 
 //        DishAdapter dishAdapter = new DishAdapter(dishes, this.listener);
         dishAdapter = new DishAdapter(this.listener);
-        new ApiRequest().execute("https://api.spoonacular.com/recipes/random");
+
+        RequestData();
 
         RecyclerView recyclerView = view.findViewById(R.id.recycler_view);
         recyclerView.setAdapter(dishAdapter);
@@ -83,6 +88,38 @@ public class OverviewFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+    }
+
+    private void RequestData() {
+        try {
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            boolean random = prefs.getBoolean("random_recipe", true);
+
+            if (random) {
+                new ApiRequest().execute("https://api.spoonacular.com/recipes/random?number=" + MAX_NUMBER_DISH);
+                return;
+            }
+            String params = "";
+            String recipe = prefs.getString("recipe_text", "");
+            if(recipe != "") {
+                params += "query=" + recipe + "&";
+            }
+
+            String cuisine = prefs.getString("cuisine_text", "");
+
+            if(cuisine != "") {
+                params += "cuisine=" + cuisine + "&";
+            }
+            Log.d("my", "RequestData: url:" + "https://api.spoonacular.com/recipes/complexSearch?" + params + "addRecipeInformation=true&number=" + MAX_NUMBER_DISH);
+
+            new ApiRequest().execute("https://api.spoonacular.com/recipes/complexSearch?" + params + "addRecipeInformation=true&number=" + MAX_NUMBER_DISH);
+            Log.d("my", "RequestData: complexSearch successful");
+        } catch (Exception e) {
+            Log.d("my", "RequestData: complexSearch failed");
+            new ApiRequest().execute("https://api.spoonacular.com/recipes/random?number=" + MAX_NUMBER_DISH);
+        }
+
+
     }
 
     private class ApiRequest extends AsyncTask<String, Integer, JSONObject> {
@@ -114,7 +151,9 @@ public class OverviewFragment extends Fragment {
         protected void onPostExecute(JSONObject result) {
 
             try {
-                Object recipes = result.get("recipes");
+                Object recipes = null;
+                if(result.has("recipes")) recipes = result.get("recipes");
+                if(result.has("results")) recipes = result.get("results");
 
                 if (recipes instanceof JSONArray) {
                     JSONArray recipesArray = (JSONArray) recipes;
@@ -139,7 +178,7 @@ public class OverviewFragment extends Fragment {
         }
 
         private HttpURLConnection AttemptConnection(String urlString) throws IOException {
-            URL url = new URL(urlString + "?number=10");
+            URL url = new URL(urlString);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setConnectTimeout(10000);
             connection.setRequestMethod("GET");
