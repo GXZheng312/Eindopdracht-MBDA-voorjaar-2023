@@ -31,7 +31,11 @@ public class Dish implements Parcelable {
         if(dishJson.has("instructions")) {
             instructions = dishJson.getString("instructions"); // random api call heeft wel instructions en complexsearch api call niet... :(
         } else {
-            instructions = "no instructions";
+            if(dishJson.has("summary")) {
+                instructions = dishJson.getString("summary"); // random api call heeft wel instructions en complexsearch api call niet... :(
+            } else {
+                instructions = "no instructions";
+            }
         }
 
         if(dishJson.has("summary")) {
