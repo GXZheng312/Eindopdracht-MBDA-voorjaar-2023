@@ -14,14 +14,7 @@ public class Dish implements Parcelable {
     protected String title;
     protected String imagePath;
     protected String instructions;
-
     protected String summary;
-
-
-    public Dish(String title, String instructions) {
-        this.title = title;
-        this.instructions = instructions;
-    }
 
     public Dish(JSONObject dishJson) throws JSONException {
         title = dishJson.getString("title");
@@ -29,17 +22,17 @@ public class Dish implements Parcelable {
             imagePath = dishJson.getString("image");
         }
         if(dishJson.has("instructions")) {
-            instructions = dishJson.getString("instructions"); // random api call heeft wel instructions en complexsearch api call niet... :(
+            instructions = dishJson.getString("instructions");
         } else {
             if(dishJson.has("summary")) {
-                instructions = dishJson.getString("summary"); // random api call heeft wel instructions en complexsearch api call niet... :(
+                instructions = dishJson.getString("summary");
             } else {
                 instructions = "no instructions";
             }
         }
 
         if(dishJson.has("summary")) {
-            summary = dishJson.getString("summary"); // random api call heeft wel instructions en complexsearch api call niet... :(
+            summary = dishJson.getString("summary");
         } else {
             summary = "no summary";
         }

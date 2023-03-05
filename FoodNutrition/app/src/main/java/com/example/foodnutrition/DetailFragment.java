@@ -11,7 +11,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Html;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,31 +42,16 @@ public class DetailFragment extends Fragment {
         titleTextView = view.findViewById(R.id.titleTextView);
         instructionTextView = view.findViewById(R.id.instructionsTextView);
         ImageButton shareButton = (ImageButton) view.findViewById(R.id.shareButton);
-        shareButton.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                shareRecipe(view);
-            }
-        });
+        shareButton.setOnClickListener(view12 -> shareRecipe(view12));
 
         ImageButton backgroundChangeButton = (ImageButton) view.findViewById(R.id.backgroundButton);
-        backgroundChangeButton.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                selectAndChangeBackground(view);
-            }
-        });
+        backgroundChangeButton.setOnClickListener(buttonView -> selectAndChangeBackground(buttonView));
 
-        MainActivity mainActivity = (MainActivity) getActivity();
         saveAgendaButton = view.findViewById(R.id.saveAgendaButton);
         saveAgendaButton.setOnClickListener(view1 -> onSaveInAgenda(view1));
 
         Bundle argument = getArguments();
-        if(argument != null) {
+        if (argument != null) {
             Dish dish = argument.getParcelable(DISH_PARCEL, Dish.class);
             setDish(dish);
         }
@@ -75,10 +59,6 @@ public class DetailFragment extends Fragment {
         return view;
     }
 
-    /**
-     * Opens gallery to select a background image
-     * @param view
-     */
     public void selectAndChangeBackground(View view) {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
@@ -99,8 +79,7 @@ public class DetailFragment extends Fragment {
 
                 TextView instructionsTextView = getView().findViewById(R.id.instructionsTextView);
                 instructionsTextView.setBackground(new BitmapDrawable(getResources(), myBitmap));
-            }
-            else {
+            } else {
                 Toast.makeText(getContext(), "You haven't picked Image",
                         Toast.LENGTH_LONG).show();
             }
@@ -115,10 +94,8 @@ public class DetailFragment extends Fragment {
         DisplaySelectedDish();
     }
 
-    public void onSaveInAgenda(View view){
-        Log.d("my", "onSaveInAgenda: inside");
+    public void onSaveInAgenda(View view) {
         if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
-            Log.d("my", "onSaveInAgenda: requesting");
             ActivityCompat.requestPermissions(getActivity(),
                     new String[]{Manifest.permission.WRITE_CALENDAR},
                     PERMISSION_REQUEST_WRITE_CALENDAR);

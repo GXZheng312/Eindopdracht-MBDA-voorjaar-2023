@@ -9,7 +9,6 @@ import androidx.fragment.app.FragmentManager;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -32,17 +31,16 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        Log.d("my", "onCreateOptionsMenu: ");
         getMenuInflater().inflate(R.menu.header_menu, menu);
         MenuItem settingsMenuItem = menu.findItem(R.id.toolbar_settings);
 
         settingsMenuItem.setOnMenuItemClickListener(menuItem -> {
             openFragment(new SettingsFragment());
-
             return true;
         });
 
         Fragment currentFragment = fragmentManager.findFragmentById(R.id.fragment_container);
+
         if (currentFragment instanceof SettingsFragment) {
             settingsMenuItem.setVisible(false);
             settingsMenuItem.setEnabled(false);
@@ -96,7 +94,7 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
         if (theme.equals("dark")) {
             setTheme(R.style.Theme_FoodNutrition_dark);
         } else {
-            setTheme(R.style.Theme_FoodNutrition_light);
+            setTheme(R.style.Theme_FoodNutrition_default_light);
         }
     }
 }

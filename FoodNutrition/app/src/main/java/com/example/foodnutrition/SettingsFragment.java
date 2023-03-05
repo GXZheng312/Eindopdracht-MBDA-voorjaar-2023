@@ -2,7 +2,6 @@ package com.example.foodnutrition;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
@@ -38,7 +37,6 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        Log.d("my", "onSharedPreferenceChanged: " + key);
         if (key.equals("background_color")) {
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
             String themeStyle = prefs.getString("theme_style", "light");

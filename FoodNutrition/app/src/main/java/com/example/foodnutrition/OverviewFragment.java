@@ -4,7 +4,6 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,10 +29,6 @@ public class OverviewFragment extends Fragment {
 
     private static final int MAX_NUMBER_DISH = 30;
     private DishAdapter dishAdapter;
-
-    public OverviewFragment() {
-        // Required empty public constructor
-    }
 
     private OnItemClickListener listener;
 
@@ -83,35 +78,39 @@ public class OverviewFragment extends Fragment {
     }
 
     private void RequestData() {
+        String apiBaseUrl = getString(R.string.api_base_url);
+
         try {
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
             boolean random = prefs.getBoolean("random_recipe", true);
 
             if (random) {
-                new ApiRequest().execute("https://api.spoonacular.com/recipes/random?number=" + MAX_NUMBER_DISH);
+                new ApiRequest().execute(apiBaseUrl + "random?number=" + MAX_NUMBER_DISH);
                 return;
             }
-            String params = "";
-            String recipe = prefs.getString("recipe_text", "");
-            if(recipe != "") {
-                params += "query=" + recipe + "&";
-            }
 
-            String cuisine = prefs.getString("cuisine_text", "");
+            new ApiRequest().execute(apiBaseUrl + "complexSearch?" + buildParam(prefs) + "addRecipeInformation=true&number=" + MAX_NUMBER_DISH);
 
-            if(cuisine != "") {
-                params += "cuisine=" + cuisine + "&";
-            }
-            Log.d("my", "RequestData: url:" + "https://api.spoonacular.com/recipes/complexSearch?" + params + "addRecipeInformation=true&number=" + MAX_NUMBER_DISH);
-
-            new ApiRequest().execute("https://api.spoonacular.com/recipes/complexSearch?" + params + "addRecipeInformation=true&number=" + MAX_NUMBER_DISH);
-            Log.d("my", "RequestData: complexSearch successful");
         } catch (Exception e) {
-            Log.d("my", "RequestData: complexSearch failed");
-            new ApiRequest().execute("https://api.spoonacular.com/recipes/random?number=" + MAX_NUMBER_DISH);
+            new ApiRequest().execute(apiBaseUrl + "random?number=" + MAX_NUMBER_DISH);
+        }
+    }
+
+    private String buildParam(SharedPreferences prefs){
+        String params = "";
+        String recipe = prefs.getString("recipe_text", "");
+
+        if(recipe != "") {
+            params += "query=" + recipe + "&";
         }
 
+        String cuisine = prefs.getString("cuisine_text", "");
 
+        if(cuisine != "") {
+            params += "cuisine=" + cuisine + "&";
+        }
+
+        return params;
     }
 
     private class ApiRequest extends AsyncTask<String, Integer, JSONObject> {

@@ -3,7 +3,6 @@ package com.example.foodnutrition;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -56,16 +55,15 @@ public class DishViewHolder extends RecyclerView.ViewHolder implements View.OnCl
         }
 
         protected Bitmap doInBackground(String... urls) {
-            String urldisplay = urls[0];
-            Bitmap mIcon11 = null;
+            String imageUrl = urls[0];
+            Bitmap bitmapIcon = null;
             try {
-                InputStream in = new java.net.URL(urldisplay).openStream();
-                mIcon11 = BitmapFactory.decodeStream(in);
+                InputStream in = new java.net.URL(imageUrl).openStream();
+                bitmapIcon = BitmapFactory.decodeStream(in);
             } catch (Exception e) {
-                Log.e("Error", e.getMessage());
                 e.printStackTrace();
             }
-            return mIcon11;
+            return bitmapIcon;
         }
 
         protected void onPostExecute(Bitmap result) {

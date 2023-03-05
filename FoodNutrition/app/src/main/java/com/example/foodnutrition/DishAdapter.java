@@ -15,20 +15,9 @@ public class DishAdapter extends RecyclerView.Adapter<DishViewHolder> {
     private ArrayList<Dish> dishes;
     private OnItemClickListener listener;
 
-    public DishAdapter(ArrayList<Dish> dishes, OnItemClickListener listener) {
-        this.dishes = dishes;
-        this.listener = listener;
-    }
-
     public DishAdapter(OnItemClickListener listener) {
         this.dishes = new ArrayList<Dish>();
         this.listener = listener;
-    }
-
-
-
-    public void setDishes(ArrayList<Dish> dishes) {
-        this.dishes = dishes;
     }
 
     @NonNull
