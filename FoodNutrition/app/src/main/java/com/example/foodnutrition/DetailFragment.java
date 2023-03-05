@@ -3,6 +3,8 @@ package com.example.foodnutrition;
 import static android.app.Activity.RESULT_OK;
 
 import android.Manifest;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -11,6 +13,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +26,7 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import java.io.InputStream;
 
@@ -99,9 +103,40 @@ public class DetailFragment extends Fragment {
             ActivityCompat.requestPermissions(getActivity(),
                     new String[]{Manifest.permission.WRITE_CALENDAR},
                     PERMISSION_REQUEST_WRITE_CALENDAR);
+            checkRequestPermissionGranted();
+        } else {
+            openSaveAgendaFragment();
         }
 
     }
+
+    private void openSaveAgendaFragment() {
+        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_CALENDAR) == PackageManager.PERMISSION_GRANTED) {
+            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+
+            fragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, new SaveAgendaFragment())
+                    .addToBackStack(null)
+                    .commit();
+        }
+    }
+
+    private void checkRequestPermissionGranted() {
+        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+            builder.setTitle("Write calendar permission needed")
+                    .setMessage("This feature needs the Write calendar permission to write in calendar. Please grant the permission.")
+                    .setPositiveButton("OK", (dialogInterface, i) -> ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CAMERA}, PERMISSION_REQUEST_WRITE_CALENDAR))
+                    .setNegativeButton("Cancel", null);
+
+            AlertDialog dialog = builder.create();
+
+            dialog.show();
+        }
+    }
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {

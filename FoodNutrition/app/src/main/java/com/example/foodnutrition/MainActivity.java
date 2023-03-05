@@ -81,10 +81,7 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
         Bundle args = new Bundle();
         args.putParcelable(DISH_PARCEL, dish);
         detailFragment.setArguments(args);
-        fragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, detailFragment)
-                .addToBackStack(null)
-                .commit();
+        openFragment(detailFragment);
     }
 
     private void setTheme() {
