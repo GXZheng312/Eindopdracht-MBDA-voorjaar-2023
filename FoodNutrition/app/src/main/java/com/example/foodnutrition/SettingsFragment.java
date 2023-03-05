@@ -3,6 +3,8 @@ package com.example.foodnutrition;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
@@ -21,6 +23,11 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
     @Override
     public void onResume() {
         super.onResume();
+
+        if (getActivity() != null) {
+            getActivity().invalidateOptionsMenu();
+        }
+
         sharedPreferences.registerOnSharedPreferenceChangeListener(this);
 
     }

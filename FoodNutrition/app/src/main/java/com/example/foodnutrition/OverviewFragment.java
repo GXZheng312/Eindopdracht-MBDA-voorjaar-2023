@@ -33,7 +33,7 @@ import java.util.ArrayList;
  */
 public class OverviewFragment extends Fragment {
 
-    private static final int MAX_NUMBER_DISH = 10;
+    private static final int MAX_NUMBER_DISH = 30;
     private DishAdapter dishAdapter;
 
     public OverviewFragment() {
@@ -61,25 +61,18 @@ public class OverviewFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+
         View view = inflater.inflate(R.layout.fragment_overview, container, false);
-
-        ArrayList<Dish> dishes = new ArrayList<>();
-
-        // Create 20 example dishes
-        for (int i = 0; i < 20; i++) {
-            dishes.add(new Dish("Pancakes" + i, "Mix flour, eggs, milk, and sugar together. Cook on a pan."));
-        }
 
         listener = (MainActivity) getActivity();
 
-//        DishAdapter dishAdapter = new DishAdapter(dishes, this.listener);
         dishAdapter = new DishAdapter(this.listener);
 
         RequestData();
 
         RecyclerView recyclerView = view.findViewById(R.id.recycler_view);
         recyclerView.setAdapter(dishAdapter);
+
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         return view;
