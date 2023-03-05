@@ -22,7 +22,9 @@ public class Dish implements Parcelable {
 
     public Dish(JSONObject dishJson) throws JSONException {
         title = dishJson.getString("title");
-        imagePath = dishJson.getString("image");
+        if(dishJson.has("image")) {
+            imagePath = dishJson.getString("image");
+        }
         if(dishJson.has("instructions")) {
             instructions = dishJson.getString("instructions"); // random api call heeft wel instructions en complexsearch api call niet... :(
         } else {
