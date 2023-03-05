@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
         if (theme.equals("dark")) {
             setTheme(R.style.Theme_FoodNutrition_dark);
         } else {
-            setTheme(R.style.LightTheme);
+            setTheme(R.style.Theme_FoodNutrition_light);
         }
     }
 }

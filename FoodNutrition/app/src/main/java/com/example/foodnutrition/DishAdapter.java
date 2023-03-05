@@ -1,5 +1,6 @@
 package com.example.foodnutrition;
 
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,6 +43,7 @@ public class DishAdapter extends RecyclerView.Adapter<DishViewHolder> {
         Dish dish = dishes.get(position);
 //        holder.imageView.setImageResource(dish.id)
         holder.titleTextView.setText(dish.title);
+        holder.summaryTextView.setText(Html.fromHtml(dish.getSummary(), Html.FROM_HTML_MODE_COMPACT));
         holder.imagePath = dish.imagePath;
         holder.loadImage();
         holder.itemView.setOnClickListener(new View.OnClickListener() {
