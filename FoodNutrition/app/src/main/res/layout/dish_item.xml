@@ -11,48 +11,53 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-
         <ImageView
+            android:contentDescription="@string/recipe_image_description"
             android:id="@+id/image_view"
             android:layout_width="@dimen/image_item_width"
             android:layout_height="@dimen/image_item_height"
+            android:src="@drawable/ic_launcher_background"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/title_text_view"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageButton
-            android:id="@+id/toggle_image_button"
-            android:layout_width="56dp"
-            android:layout_height="43dp"
-            app:layout_constraintStart_toEndOf="@+id/image_view"
-            app:srcCompat="@android:drawable/arrow_up_float"
-            tools:layout_editor_absoluteY="6dp" />
-
         <TextView
             android:id="@+id/title_text_view"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
             android:ellipsize="end"
-            android:maxLines="1"
-            android:text="Recipe Title"
+            android:maxLines="2"
+            android:text="@string/recipe_title_prefix"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/toggle_image_button"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/toggle_image_button"
+            app:layout_constraintHorizontal_weight="3"
+            app:layout_constraintStart_toEndOf="@+id/image_view"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintVertical_bias="0.5" />
 
+
+        <ImageButton
+            android:contentDescription="@string/image_toggle_button"
+            android:id="@+id/toggle_image_button"
+            android:layout_width="@dimen/image_item_width"
+            android:layout_height="@dimen/image_item_height"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/title_text_view"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@android:drawable/arrow_up_float" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
         android:id="@+id/summary_text_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Recipe Summary"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@+id/toggle_image_button" />
-
+        android:text="@string/recipe_summary_prefix"
+        android:visibility="gone"/>
 
 </LinearLayout>

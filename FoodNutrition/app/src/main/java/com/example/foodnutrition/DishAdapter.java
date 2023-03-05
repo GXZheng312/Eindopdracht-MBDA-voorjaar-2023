@@ -41,17 +41,16 @@ public class DishAdapter extends RecyclerView.Adapter<DishViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull DishViewHolder holder, int position) {
         Dish dish = dishes.get(position);
-//        holder.imageView.setImageResource(dish.id)
+
         holder.titleTextView.setText(dish.title);
+
         holder.summaryTextView.setText(Html.fromHtml(dish.getSummary(), Html.FROM_HTML_MODE_COMPACT));
-        holder.imagePath = dish.imagePath;
+        if(dish.imagePath != null){
+            holder.imagePath = dish.imagePath;
+        }
+
         holder.loadImage();
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                listener.onItemClick(dish);
-            }
-        });
+        holder.itemView.setOnClickListener(v -> listener.onItemClick(dish));
     }
 
     @Override
@@ -62,5 +61,9 @@ public class DishAdapter extends RecyclerView.Adapter<DishViewHolder> {
     public void addDish(Dish dish) {
         dishes.add(dish);
         notifyDataSetChanged();
+    }
+
+    public void removeAllDishes() {
+        dishes = new ArrayList<Dish>();
     }
 }

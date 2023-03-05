@@ -1,19 +1,25 @@
 package com.example.foodnutrition;
 
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Parcelable;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -26,14 +32,9 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link OverviewFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class OverviewFragment extends Fragment {
 
-    private static final int MAX_NUMBER_DISH = 10;
+    private static final int MAX_NUMBER_DISH = 30;
     private DishAdapter dishAdapter;
 
     public OverviewFragment() {
@@ -41,17 +42,6 @@ public class OverviewFragment extends Fragment {
     }
 
     private OnItemClickListener listener;
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment.
-     *
-     * @return A new instance of fragment OverviewFragment.
-     */
-    public static OverviewFragment newInstance(String param1, String param2) {
-        OverviewFragment fragment = new OverviewFragment();
-        return fragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -61,22 +51,29 @@ public class OverviewFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+
         View view = inflater.inflate(R.layout.fragment_overview, container, false);
-
-        ArrayList<Dish> dishes = new ArrayList<>();
-
-        // Create 20 example dishes
-        for (int i = 0; i < 20; i++) {
-            dishes.add(new Dish("Pancakes" + i, "Mix flour, eggs, milk, and sugar together. Cook on a pan."));
-        }
 
         listener = (MainActivity) getActivity();
 
-//        DishAdapter dishAdapter = new DishAdapter(dishes, this.listener);
-        dishAdapter = new DishAdapter(this.listener);
+        if(dishAdapter == null) {
+            dishAdapter = new DishAdapter(listener);
+            refreshDishes();
+        }
 
-        RequestData();
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        boolean random = prefs.getBoolean("random_recipe", true);
+
+        TextView overviewModeText = view.findViewById(R.id.overviewModeText);
+
+        if(random) {
+            overviewModeText.setText("Mode: Random");
+        } else {
+            overviewModeText.setText("Mode: ComplexSearch");
+        }
+
+        ImageButton refreshButton = view.findViewById(R.id.refreshButton);
+        refreshButton.setOnClickListener(v -> refreshDishes());
 
         RecyclerView recyclerView = view.findViewById(R.id.recycler_view);
         recyclerView.setAdapter(dishAdapter);
@@ -85,9 +82,10 @@ public class OverviewFragment extends Fragment {
         return view;
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    private void refreshDishes(){
+        dishAdapter.removeAllDishes();
+        RequestData();
+        dishAdapter.notifyDataSetChanged();
     }
 
     private void RequestData() {
