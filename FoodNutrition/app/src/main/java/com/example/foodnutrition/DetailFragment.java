@@ -1,20 +1,15 @@
 package com.example.foodnutrition;
 
 import static android.app.Activity.RESULT_OK;
-import static android.content.Context.MODE_PRIVATE;
 
-import android.app.Activity;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.Manifest;
-import android.database.Cursor;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,10 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toolbar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -70,11 +62,8 @@ public class DetailFragment extends Fragment {
             }
         });
 
-        //Toolbar shareToolbar = (Toolbar) view.findViewById(R.id.toolbar);
         MainActivity mainActivity = (MainActivity) getActivity();
-//        mainActivity.setSupportActionBar(shareToolbar);
         saveAgendaButton = view.findViewById(R.id.saveAgendaButton);
-//        imageView = view.findViewById(R.id.imageView);
         saveAgendaButton.setOnClickListener(view1 -> onSaveInAgenda(view1));
 
         Bundle argument = getArguments();
@@ -82,7 +71,6 @@ public class DetailFragment extends Fragment {
             Dish dish = argument.getParcelable(DISH_PARCEL, Dish.class);
             setDish(dish);
         }
-
 
         return view;
     }
@@ -96,57 +84,21 @@ public class DetailFragment extends Fragment {
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("image/*");
         startActivityForResult(intent, 42);
-
-
-
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         try {
-            // When an Image is picked
             if (requestCode == 42 && resultCode == RESULT_OK
                     && null != data) {
-                // Get the Image from data
-
                 Uri selectedImage = data.getData();
-//                String[] filePathColumn = { MediaStore.MediaColumns.DATA };
-//
-//                // Get the cursor
-//
-//                MainActivity mainActivity = (MainActivity) getActivity();
-//
-//                Cursor cursor = mainActivity.getContentResolver().query(selectedImage,
-//                        filePathColumn, null, null, null);
-//                // Move to first row
-//                cursor.moveToFirst();
-//
-//                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-//                String imgpath = cursor.getString(columnIndex);
-//                Log.d("path", imgpath);
-//                cursor.close();
-//
-//                SharedPreferences sp;
-//                sp=mainActivity.getSharedPreferences("setback", MODE_PRIVATE);
-//                SharedPreferences.Editor edit=sp.edit();
-//                edit.putString("imagepath",imgpath);
-//                edit.commit();
-
-
 
                 final InputStream imageStream = getActivity().getContentResolver().openInputStream(selectedImage);
                 Bitmap myBitmap = BitmapFactory.decodeStream(imageStream);
 
-//                ImageView myImage = getView().findViewById(R.id.backgroundButton);
-//                myImage.setImageBitmap(myBitmap);
-
-//                Bitmap myBitmap = BitmapFactory.decodeFile(imgpath);
-
-                // get instructionsTextView
                 TextView instructionsTextView = getView().findViewById(R.id.instructionsTextView);
                 instructionsTextView.setBackground(new BitmapDrawable(getResources(), myBitmap));
-//                myImage.setImageBitmap(myBitmap);
             }
             else {
                 Toast.makeText(getContext(), "You haven't picked Image",
