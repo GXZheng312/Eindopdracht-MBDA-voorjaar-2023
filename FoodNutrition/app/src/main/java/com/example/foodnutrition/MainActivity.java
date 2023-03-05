@@ -1,26 +1,17 @@
 package com.example.foodnutrition;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.preference.PreferenceManager;
 
-import android.os.AsyncTask;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.MotionEvent;
-import android.widget.Toast;
 import android.util.Log;
-import android.widget.TextView;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.Toast;
 
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements OnItemClickListener {
 
@@ -31,16 +22,36 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
-        // Set fragment
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, new OverviewFragment())
-                .commit();
-
-
-
+        setTheme();
+        openFragment(new OverviewFragment());
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.header_menu, menu);
+        MenuItem settingsMenuItem = menu.findItem(R.id.toolbar_settings);
+
+        settingsMenuItem.setOnMenuItemClickListener(menuItem -> {
+            openFragment(new SettingsFragment());
+            return true;
+        });
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        return true;
+    }
+
+    private void openFragment(Fragment fragment) {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, fragment)
+                .addToBackStack(null)
+                .commit();
+    }
+
     @Override
     public void onItemClick(Dish dish) {
         Toast.makeText(this, "Item Clicked:" + dish.title, Toast.LENGTH_SHORT).show(); // TODO remove
@@ -52,10 +63,19 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
         Bundle args = new Bundle();
         args.putString("title", dish.title);
         detailFragment.setArguments(args);
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, detailFragment)
-                .addToBackStack(null)
-                .commit();
+
+        openFragment(detailFragment);
+    }
+
+    private void setTheme(){
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String theme = preferences.getString("background_color", "light");
+        Log.d("my", "setTheme: " + theme);
+        if (theme.equals("dark")) {
+            setTheme(R.style.Theme_FoodNutrition_dark);
+        } else {
+            setTheme(R.style.LightTheme);
+        }
     }
 
 }

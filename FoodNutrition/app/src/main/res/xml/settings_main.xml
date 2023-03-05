@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="Appearance">
+        <ListPreference
+            android:key="background_color"
+            android:title="Background Color"
+            android:summary="Select a background color"
+            android:entries="@array/background_color_options"
+            android:entryValues="@array/background_color_values"
+            android:defaultValue="light" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="Recipe Settings">
+        <SwitchPreference
+            android:key="random_recipe"
+            android:title="Random Recipe"
+            android:summary="Turn on to display a random recipe" />
+
+        <EditTextPreference
+            android:key="recipe_text"
+            android:title="Recipe Text"
+            android:dialogTitle="Enter Recipe Text"
+            android:dialogMessage="Please enter recipe text:"
+            android:defaultValue=""
+            android:inputType="text"
+            android:singleLine="true" />
+
+        <EditTextPreference
+            android:key="cuisine_text"
+            android:title="Cuisine Text"
+            android:dialogTitle="Enter Cuisine Text"
+            android:dialogMessage="Please enter cuisine text:"
+            android:defaultValue=""
+            android:inputType="text"
+            android:singleLine="true" />
+    </PreferenceCategory>
+</PreferenceScreen>
