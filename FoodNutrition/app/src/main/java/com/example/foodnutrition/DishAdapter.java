@@ -62,4 +62,8 @@ public class DishAdapter extends RecyclerView.Adapter<DishViewHolder> {
         dishes.add(dish);
         notifyDataSetChanged();
     }
+
+    public void removeAllDishes() {
+        dishes = new ArrayList<Dish>();
+    }
 }

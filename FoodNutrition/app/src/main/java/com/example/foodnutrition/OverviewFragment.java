@@ -1,19 +1,25 @@
 package com.example.foodnutrition;
 
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Parcelable;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -26,11 +32,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link OverviewFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class OverviewFragment extends Fragment {
 
     private static final int MAX_NUMBER_DISH = 30;
@@ -41,17 +42,6 @@ public class OverviewFragment extends Fragment {
     }
 
     private OnItemClickListener listener;
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment.
-     *
-     * @return A new instance of fragment OverviewFragment.
-     */
-    public static OverviewFragment newInstance(String param1, String param2) {
-        OverviewFragment fragment = new OverviewFragment();
-        return fragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -66,21 +56,36 @@ public class OverviewFragment extends Fragment {
 
         listener = (MainActivity) getActivity();
 
-        dishAdapter = new DishAdapter(this.listener);
+        if(dishAdapter == null) {
+            dishAdapter = new DishAdapter(listener);
+            refreshDishes();
+        }
 
-        RequestData();
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        boolean random = prefs.getBoolean("random_recipe", true);
+
+        TextView overviewModeText = view.findViewById(R.id.overviewModeText);
+
+        if(random) {
+            overviewModeText.setText("Mode: Random");
+        } else {
+            overviewModeText.setText("Mode: ComplexSearch");
+        }
+
+        ImageButton refreshButton = view.findViewById(R.id.refreshButton);
+        refreshButton.setOnClickListener(v -> refreshDishes());
 
         RecyclerView recyclerView = view.findViewById(R.id.recycler_view);
         recyclerView.setAdapter(dishAdapter);
-
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         return view;
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    private void refreshDishes(){
+        dishAdapter.removeAllDishes();
+        RequestData();
+        dishAdapter.notifyDataSetChanged();
     }
 
     private void RequestData() {
