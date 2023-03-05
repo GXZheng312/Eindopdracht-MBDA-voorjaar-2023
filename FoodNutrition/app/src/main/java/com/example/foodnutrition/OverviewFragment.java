@@ -163,18 +163,9 @@ public class OverviewFragment extends Fragment {
                     }
                 }
 
-
-                //                // Loop over all recipes in a for loop
-//                for(Object recipe : recipes.values()) {
-//
-//                }
             } catch (JSONException e) {
                 throw new RuntimeException(e);
             }
-
-
-//            TextView textView = findViewById(R.id.textView2);
-//            textView.setText(result.toString());
         }
 
         private HttpURLConnection AttemptConnection(String urlString) throws IOException {
