@@ -42,6 +42,8 @@ public class DishAdapter extends RecyclerView.Adapter<DishViewHolder> {
         Dish dish = dishes.get(position);
 //        holder.imageView.setImageResource(dish.id)
         holder.titleTextView.setText(dish.title);
+        holder.imagePath = dish.imagePath;
+        holder.loadImage();
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
