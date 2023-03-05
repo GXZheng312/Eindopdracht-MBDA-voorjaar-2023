@@ -9,4 +9,6 @@
     <string name="recipe_summary_prefix">Recipe Summary</string>
     <string name="recipe_title_prefix">Recipe Title</string>
     <string name="recipe_image_description">recipe image</string>
+    <string name="overview_mode_prefix">Mode:</string>
+    <string name="refresh_button_description">image button refresh overview list</string>
 </resources>
