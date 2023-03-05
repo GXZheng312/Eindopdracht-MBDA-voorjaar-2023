@@ -1,12 +1,15 @@
 package com.example.foodnutrition;
 
+import static com.example.foodnutrition.DetailFragment.DISH_PARCEL;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.preference.PreferenceManager;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,9 +17,6 @@ import android.widget.Toast;
 
 
 public class MainActivity extends AppCompatActivity implements OnItemClickListener {
-
-
-    private OnItemClickListener listener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,17 +54,18 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
 
     @Override
     public void onItemClick(Dish dish) {
-        Toast.makeText(this, "Item Clicked:" + dish.title, Toast.LENGTH_SHORT).show(); // TODO remove
         this.onDishSelected(dish);
     }
 
     private void onDishSelected(Dish dish) {
         DetailFragment detailFragment = new DetailFragment();
         Bundle args = new Bundle();
-        args.putString("title", dish.title);
+        args.putParcelable(DISH_PARCEL, dish);
         detailFragment.setArguments(args);
-
-        openFragment(detailFragment);
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, detailFragment)
+                .addToBackStack(null)
+                .commit();
     }
 
     private void setTheme(){
@@ -77,5 +78,4 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
             setTheme(R.style.LightTheme);
         }
     }
-
 }
