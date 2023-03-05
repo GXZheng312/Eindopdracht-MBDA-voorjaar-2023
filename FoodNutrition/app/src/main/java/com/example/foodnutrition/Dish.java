@@ -15,6 +15,9 @@ public class Dish implements Parcelable {
     protected String imagePath;
     protected String instructions;
 
+    protected String summary;
+
+
     public Dish(String title, String instructions) {
         this.title = title;
         this.instructions = instructions;
@@ -30,6 +33,12 @@ public class Dish implements Parcelable {
         } else {
             instructions = "no instructions";
         }
+
+        if(dishJson.has("summary")) {
+            summary = dishJson.getString("summary"); // random api call heeft wel instructions en complexsearch api call niet... :(
+        } else {
+            summary = "no summary";
+        }
     }
 
     // getters
@@ -42,6 +51,9 @@ public class Dish implements Parcelable {
         return instructions;
     }
 
+    public String getSummary() {
+        return summary;
+    }
     @Override
     public int describeContents() {
         return 0;
@@ -52,5 +64,6 @@ public class Dish implements Parcelable {
         parcel.writeString(instructions);
         parcel.writeString(imagePath);
         parcel.writeString(title);
+        parcel.writeString(summary);
     }
 }

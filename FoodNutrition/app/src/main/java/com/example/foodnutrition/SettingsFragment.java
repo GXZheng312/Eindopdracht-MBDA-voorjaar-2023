@@ -21,14 +21,14 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
     @Override
     public void onResume() {
         super.onResume();
-        getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
+        sharedPreferences.registerOnSharedPreferenceChangeListener(this);
 
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        getPreferenceScreen().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
+        sharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
     }
 
     @Override
@@ -39,9 +39,9 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
             String themeStyle = prefs.getString("theme_style", "light");
 
             if (themeStyle.equals("light")) {
-                getActivity().setTheme(R.style.LightTheme);
+                getActivity().setTheme(R.style.Theme_FoodNutrition_light);
             } else {
-                getActivity().setTheme(R.style.DarkTheme);
+                getActivity().setTheme(R.style.Theme_FoodNutrition_dark);
             }
 
             getActivity().recreate();

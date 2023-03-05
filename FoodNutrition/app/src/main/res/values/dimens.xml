@@ -3,4 +3,6 @@
     <dimen name="list_item_height">60dp</dimen>
     <dimen name="margin_medium">12dp</dimen>
     <dimen name="list_item_width">0dp</dimen>
+    <dimen name="image_item_width">67dp</dimen>
+    <dimen name="image_item_height">54dp</dimen>
 </resources>
